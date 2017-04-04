@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Netactica- Ejercicio FrontEnd">
+    <meta name="author" content="Jose Quispe">
+    <title>Ejercicio FrontEnd</title>
+
+    <!-- CSS -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <link href="Content/rzslider.css" rel="stylesheet">
+    <link href="Content/frontend.css" rel="stylesheet">
+    <link href="Content/ui-bootstrap-csp.css" rel="stylesheet" />
+
+    <!-- Scripts -->
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/angular-mocks.js"></script>
+    <script src="scripts/rzslider.min.js"></script>
+    <script src="scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    
+    <!-- AngularJS Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+
+</head>
+<body ng-app="app" ng-controller="frontendController">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-section">
+                    <div class="row">
+                        <form role="form">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="sr-only" for="location">Location</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="location" ng-model="inputLocation" placeholder="Buscar hoteles disponibles para:">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="sr-only" for="checkin">Check in</label>
+                                    <div class="input-group">
+                                        <input type="datetime" ng-model="checkin" class="form-control" id="checkin" placeholder="Check in">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="sr-only" for="checkout">Check out</label>
+                                    <div class="input-group">
+                                        <input type="datetime" ng-model="checkout" class="form-control" id="checkout" placeholder="Check out">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="sr-only" for="guest">Guest</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="guest" placeholder="Huespedes">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default" ng-click="getHotelListByLocation(inputLocation)">Buscar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Ordernar por</label>
+                    <select id="guest" name="order" class="form-control" ng-model="sortBy">
+                        <option value="stars">Por relevancia</option>
+                        <option value="price">Por precio</option>
+                        <option value="name">Por nombre</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="well" id="js_map">
+                            Aca mapa
+                        </div>
+
+                        <h4>Filtrar</h4>
+                        <div class="well">
+                            <h4><span class="glyphicon glyphicon-search"></span> Nombre del hotel</h4>
+                            <div class="input-group">
+                                <input type="text" ng-model="inputName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="well">
+                            <h4><span class="glyphicon glyphicon-usd"></span> Precio por noche</h4>
+                            <rzslider rz-slider-model="slider.minValue"
+                                      rz-slider-high="slider.maxValue"
+                                      rz-slider-options="slider.options"></rzslider>
+
+                        </div>
+                        <div class="well">
+                            <h4><span class="glyphicon glyphicon-star"></span> Estrellas </h4>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars()"><label>Todas las estrellas</label>
+                            </div>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars(5)">
+                                <span ng-repeat="value in rating(5) track by $index" class="glyphicon glyphicon-star"></span>
+                            </div>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars(4)">
+                                <span ng-repeat="value in rating(4) track by $index" class="glyphicon glyphicon-star"></span>
+                            </div>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars(3)">
+                                <span ng-repeat="value in rating(3) track by $index" class="glyphicon glyphicon-star"></span>
+                            </div>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars(2)">
+                                <span ng-repeat="value in rating(2) track by $index" class="glyphicon glyphicon-star"></span>
+                            </div>
+
+                            <div class="ratings">
+                                <input type="checkbox" ng-click="getHotelListByStars(1)">
+                                <span ng-repeat="value in rating(1) track by $index" class="glyphicon glyphicon-star"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="row" ng-repeat="hotel in hotels | filter:inputName | orderBy:sortBy:reverse">
+
+                    <div class="col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <h4>{{ hotel.name }}</h4>
+                        <p><span ng-repeat="value in rating(hotel.stars) track by $index" class="glyphicon glyphicon-star"></span></p>
+                        <p><span class="glyphicon glyphicon-bed"></span> Solo la habitación</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <p>Precio por noche por habitación</p>
+                        </div>
+                        <div class="row">
+                            <h4>${{ hotel.price }}</h4>
+                        </div>
+                        <div class="row">
+                            <p>Impuestos y tasas no incluidos</p>
+                        </div>
+                        <div class="row">
+                            <button type="button" class="btn btn-default">Ver hotel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+    </div>
+</body>
+</html>
